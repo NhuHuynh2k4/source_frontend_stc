@@ -1,0 +1,11 @@
+.footer-icon li a i{
+  color: gray;
+}
+.footer-text span{
+  color:gray;
+}
+.footer-icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

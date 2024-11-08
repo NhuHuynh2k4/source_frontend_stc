@@ -1,0 +1,67 @@
+<!-- question-form.component.html -->
+<div class="modal fade" id="questionModal" tabindex="-1"
+  aria-labelledby="questionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="questionModalLabel">Thêm mới câu hỏi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form inside Modal -->
+        <form>
+          <div class="mb-3">
+            <label for="questionCodeInput" class="form-label">Mã câu hỏi</label>
+            <input type="text" class="form-control" id="questionCodeInput"
+              formControlName="questionCode" placeholder="Nhập mã câu hỏi">
+          </div>
+          <div class="mb-3">
+            <label for="questionNameInput" class="form-label">Tên câu
+              hỏi</label>
+            <input type="text" class="form-control" id="questionNameInput"
+              formControlName="questionName" placeholder="Nhập tên câu hỏi">
+          </div>
+          <div class="mb-3">
+            <label for="questionTextContentInput" class="form-label">Nội dung
+              câu hỏi</label>
+            <textarea class="form-control" id="questionTextContentInput"
+              formControlName="questionTextContent" rows="3"
+              placeholder="Nhập nội dung câu hỏi"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="questionImgContentInput" class="form-label">Nội dung
+              hình ảnh</label>
+            <input type="text" class="form-control" id="questionImgContentInput"
+              formControlName="questionImgContent"
+              placeholder="Nhập nội dung hình ảnh">
+          </div>
+          <div class="mb-3">
+            <label for="questionTypeSelect" class="form-label">Loại câu
+              hỏi</label>
+            <select class="form-select" id="questionTypeSelect"
+              formControlName="questionTypeID">
+              <option value>Chọn loại câu hỏi</option>
+              <!-- <option *ngFor="let type of questionTypes" [value]="type.id">{{
+                type.name }}</option> -->
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="subjectSelect" class="form-label">Môn học</label>
+            <select class="form-select" id="subjectSelect"
+              formControlName="subjectsID">
+              <option value>Chọn môn học</option>
+              <!-- <option *ngFor="let subject of subjects" [value]="subject.id">{{
+                subject.name }}</option> -->
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"
+              data-bs-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-dark">Lưu thay đổi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

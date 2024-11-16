@@ -10,10 +10,16 @@ import { ClassFormComponent } from './pages/class/class-form/class-form.componen
 import { ClassTableComponent } from './pages/class/class-table/class-table.component';
 import { ClassComponent } from './pages/class/class.component';
 
+
 // Import các component cho question
 import { QuestionFormComponent } from './pages/question/question-form/question-form.component';
 import { QuestionTableComponent } from './pages/question/question-table/question-table.component';
 import { QuestionComponent } from './pages/question/question.component';
+// Import các component cho student
+import { StudentComponent } from './pages/student/student.component';
+import { StudentFormComponent } from './pages/student/student-form/student-form.component';
+import { StudentTableComponent } from './pages/student/student-table/student-table.component';
+import { ReactiveFormsModule } from '@angular/forms';  // Import this module
 
 @NgModule({
   declarations: [
@@ -25,12 +31,16 @@ import { QuestionComponent } from './pages/question/question.component';
     ClassFormComponent,
     QuestionComponent,               // Đảm bảo đã khai báo các component cho Question
     QuestionTableComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    StudentComponent,
+    StudentFormComponent,
+    StudentTableComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule  // Add this to imports
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,27 +1,47 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetForm()">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Thêm mới thông tin</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{ isUpdate ? 'Cập nhật thông tin loại câu hỏi' : 'Thêm mới thông tin loại câu hỏi' }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- Form bên trong Modal -->
-        <form>
-          <div class="mb-3">
-            <label for="QuestionTypeCode" class="form-label">Mã loại câu hỏi</label>
-            <input type="text" class="form-control" id="QuestionTypeCode" placeholder="Nhập mã loại câu hỏi">
+        <form [formGroup]="questionTypeForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <!-- Cột 1 -->
+            <div class="">
+              <div class="form-group">
+                <label for="questionTypeCode" class="form-label">Mã loại câu hỏi</label>
+                <input type="text" formControlName="questionTypeCode" class="form-control" id="questionTypeCode" name="questionTypeCode" placeholder="Nhập mã loại câu hỏi">
+                <div *ngIf="f['questionTypeCode'].touched && f['questionTypeCode'].invalid" class="text-danger">
+                  <small *ngIf="f['questionTypeCode'].errors?.['required']">Mã loại câu hỏi là bắt buộc</small>
+                </div>
+                <div *ngIf="backendErrors.questionTypeCode" class="text-danger">
+                  <small>{{ backendErrors.questionTypeCode }}</small>
+                </div>
+              </div>
+              <div class="form-group ">
+                <label for="questionTypeName" class="form-label">Tên loại câu hỏi</label>
+                <input type="text" formControlName="questionTypeName" class="form-control" id="questionTypeName" name="questionTypeName" placeholder="Nhập tên loại câu hỏi">
+                <div *ngIf="f['questionTypeName'].touched && f['questionTypeName'].invalid" class="text-danger">
+                  <small *ngIf="f['questionTypeName'].errors?.['required']">Tên loại câu hỏi là bắt buộc</small>
+                </div>
+                <div *ngIf="backendErrors.questionTypeName" class="text-danger">
+                  <small>{{ backendErrors.questionTypeName }}</small>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="QuestionTypeName" class="form-label">Tên loại câu hỏi</label>
-            <input type="email" class="form-control" id="QuestionTypeName" placeholder="Nhập tên loại câu hỏi">
+          <div *ngIf="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-dark">Lưu</button>
           </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-        <button type="button" class="btn btn-dark">Lưu thay đổi</button>
       </div>
     </div>
   </div>

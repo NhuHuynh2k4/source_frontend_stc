@@ -56,3 +56,15 @@
   .mb-30{
     margin-bottom: 30px;
   } 
+  .parent {
+    
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    
+    
+  }
+  
+  .child {
+    text-align: center; /* Căn giữa nội dung bên trong */
+  }
+  

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,28 +8,18 @@ import { Observable } from 'rxjs';
 export class StudentService {
   private baseUrl = 'http://localhost:5198/api/student'; // URL gốc cho các thao tác Student
 
+  private selectedStudent = new BehaviorSubject<any>(null);
+  selectedStudent$ = this.selectedStudent.asObservable();
+
   constructor(private http: HttpClient) { }
+
+  setSelectedStudent(student: any) {
+    this.selectedStudent.next(student);
+  }
+
   // Phương thức lấy thông tin sinh viên theo ID
-  getStudentById(StudentID: number): Observable<{
-    id: number;
-    studentCode: string;
-    studentName: string;
-    gender: boolean;
-    numberPhone: string;
-    address: string;
-    email: string;
-    birthdayDate: string;
-  }> {
-    return this.http.get<{
-      id: number;
-      studentCode: string;
-      studentName: string;
-      gender: boolean;
-      numberPhone: string;
-      address: string;
-      email: string;
-      birthdayDate: string;
-    }>(`${this.baseUrl}/get-by-id/${StudentID}`);
+  getStudentById(StudentID: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/get-by-id/${StudentID}`);
   }
 
   // Phương thức lấy danh sách các sinh viên
@@ -47,5 +37,11 @@ export class StudentService {
   // Phương thức cập nhật sinh viên (ví dụ khi cần cập nhật sinh viên)
   updateStudent(studentData: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/update`, studentData);  // giả sử endpoint cập nhật là `/update`
+  }
+
+  // Xóa sinh viên
+  deleteStudent(StudentID: number): Observable<any> {
+    const url = `${this.baseUrl}/delete/${StudentID}`;  // Tạo URL với ID lớp học
+    return this.http.delete<any>(url);  // Gửi request DELETE
   }
 }

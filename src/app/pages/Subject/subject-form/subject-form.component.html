@@ -1,0 +1,52 @@
+<div class="modal fade" id="subjectModal" tabindex="-1"
+  aria-labelledby="subjectModalLabel" aria-hidden="true"
+  (hidden.bs.modal)="resetForm()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="subjectModalLabel">{{ isUpdate ?
+          'Cập nhật môn học' : 'Thêm mới môn học' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <form [formGroup]="subjectForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+          <!-- Mã môn học -->
+          <div class="mb-3">
+            <label for="subjectsCodeInput" class="form-label">Mã môn học</label>
+            <input type="text" class="form-control" id="subjectsCodeInput"
+              formControlName="subjectsCode" placeholder="Nhập mã môn học">
+            <div
+              *ngIf="subjectForm.get('subjectsCode')?.touched && subjectForm.get('subjectsCode')?.invalid"
+              class="text-danger">
+              <small
+                *ngIf="subjectForm.get('subjectsCode')?.hasError('required')">Mã
+                môn học là bắt buộc</small>
+            </div>
+          </div>
+
+          <!-- Tên môn học -->
+          <div class="mb-3">
+            <label for="subjectsNameInput" class="form-label">Tên môn
+              học</label>
+            <input type="text" class="form-control" id="subjectsNameInput"
+              formControlName="subjectsName" placeholder="Nhập tên môn học">
+            <div
+              *ngIf="subjectForm.get('subjectsName')?.touched && subjectForm.get('subjectsName')?.invalid"
+              class="text-danger">
+              <small
+                *ngIf="subjectForm.get('subjectsName')?.hasError('required')">Tên
+                môn học là bắt buộc</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+            data-bs-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-dark"
+            [disabled]="subjectForm.invalid">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

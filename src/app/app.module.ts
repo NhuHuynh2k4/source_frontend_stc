@@ -1,58 +1,49 @@
-import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
-
-// Import các component cho Class
 import { ClassFormComponent } from './pages/class/class-form/class-form.component';
 import { ClassTableComponent } from './pages/class/class-table/class-table.component';
 import { ClassComponent } from './pages/class/class.component';
 
-// Import các component cho Question
+
+// Import các component cho question
 import { QuestionFormComponent } from './pages/question/question-form/question-form.component';
 import { QuestionTableComponent } from './pages/question/question-table/question-table.component';
 import { QuestionComponent } from './pages/question/question.component';
-
-// Import các component cho Subject
-import { SubjectFormComponent } from './pages/Subject/subject-form/subject-form.component';
-import { SubjectTableComponent } from './pages/Subject/subject-table/subject-table.component';
-import { SubjectComponent } from './pages/Subject/subject.componet'; // Đảm bảo tên file đúng
+// Import các component cho student
+import { StudentComponent } from './pages/student/student.component';
+import { StudentFormComponent } from './pages/student/student-form/student-form.component';
+import { StudentTableComponent } from './pages/student/student-table/student-table.component';
+import { ReactiveFormsModule } from '@angular/forms';  // Import this module
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-
-    // Các component cho Class
     ClassComponent,
     ClassTableComponent,
     ClassFormComponent,
-
-    // Các component cho Question
-    QuestionComponent,
+    QuestionComponent,               // Đảm bảo đã khai báo các component cho Question
     QuestionTableComponent,
     QuestionFormComponent,
-
-    // Các component cho Subject
-    SubjectComponent,
-    SubjectTableComponent,
-    SubjectFormComponent,
+    StudentComponent,
+    StudentFormComponent,
+    StudentTableComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule  // Add this to imports
   ],
   providers: [],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA] // Sử dụng nếu bạn có Web Components
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]  // Giữ lại nếu sử dụng Web Components
 })
 export class AppModule { }

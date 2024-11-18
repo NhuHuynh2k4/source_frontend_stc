@@ -1,0 +1,122 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{ isUpdate ? 'Cập nhật thông tin sinh viên' : 'Thêm mới thông tin sinh viên' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form bên trong Modal -->
+        <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <!-- Cột 1 -->
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label for="studentCode">Mã sinh viên</label>
+                <input type="text" [formControlName]="'studentCode'" class="form-control" id="studentCode" placeholder="Nhập mã sinh viên" [readonly]="isUpdate">
+                <div *ngIf="f['studentCode'].touched && f['studentCode'].invalid || backendErrors.studentCode" class="text-danger">
+                  <small *ngIf="f['studentCode'].errors?.['required']">Mã sinh viên là bắt buộc</small>
+                  <small *ngIf="backendErrors.studentCode">{{ backendErrors.studentCode }}</small>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label for="studentName" class="form-label">Tên</label>
+                <input type="text" [formControlName]="'studentName'" class="form-control" id="studentName" placeholder="Nhập tên" value="studentName">
+                <div *ngIf="f['studentName'].touched && f['studentName'].invalid || backendErrors.studentName" class="text-danger">
+                  <small *ngIf="f['studentName'].errors?.['required']">Tên là bắt buộc</small>
+                  <small *ngIf="backendErrors.studentName">{{ backendErrors.studentName }}</small>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="form-label">Giới tính</label>
+                <div class="d-flex">
+                  <div class="me-3">
+                    <input type="radio" [formControlName]="'gender'" class="form-check-input" id="male" [value]="true">
+                    <label class="form-check-label" for="male">Nam</label>
+                  </div>
+                  <div>
+                    <input type="radio" [formControlName]="'gender'" class="form-check-input" id="female" [value]="false">
+                    <label class="form-check-label" for="female">Nữ</label>
+                  </div>
+                </div>
+                <div *ngIf="f['gender'].touched && f['gender'].invalid || backendErrors.gender" class="text-danger">
+                  <small *ngIf="f['gender'].errors?.['required']">Giới tính là bắt buộc</small>
+                  <small *ngIf="backendErrors.gender">{{ backendErrors.gender }}</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột 2 -->
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label for="phoneInput" class="form-label">Số điện thoại</label>
+                <input type="tel" [formControlName]="'numberPhone'" class="form-control" id="phoneInput" placeholder="Nhập số điện thoại">
+                <div *ngIf="f['numberPhone'].touched && f['numberPhone'].invalid || backendErrors.numberPhone" class="text-danger">
+                  <small *ngIf="f['numberPhone'].errors?.['required']">Số điện thoại là bắt buộc</small>
+                  <small *ngIf="f['numberPhone'].errors?.['pattern']">Số điện thoại không hợp lệ</small>
+                  <small *ngIf="backendErrors.numberPhone">{{ backendErrors.numberPhone }}</small>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label for="birthdayDateInput" class="form-label">Ngày sinh</label>
+                <input type="date" [formControlName]="'birthdayDate'" class="form-control" id="birthdayDateInput" >
+                <div *ngIf="f['birthdayDate'].touched && f['birthdayDate'].invalid || backendErrors.birthdayDate" class="text-danger">
+                  <small *ngIf="f['birthdayDate'].errors?.['required']">Ngày sinh là bắt buộc</small>
+                  <small *ngIf="backendErrors.birthdayDate">{{ backendErrors.birthdayDate }}</small>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label for="addressInput" class="form-label">Địa chỉ</label>
+                <input type="text" [formControlName]="'address'" class="form-control" id="addressInput" placeholder="Nhập địa chỉ">
+                <div *ngIf="f['address'].touched && f['address'].invalid || backendErrors.address" class="text-danger">
+                  <small *ngIf="f['address'].errors?.['required']">Địa chỉ là bắt buộc</small>
+                  <small *ngIf="backendErrors.address">{{ backendErrors.address }}</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột 3 -->
+            <div class="col-md-4">
+              <div class="form-group mb-3">
+                <label for="passwordInput" class="form-label">Mật khẩu</label>
+                <input type="password" [formControlName]="'password'" class="form-control" id="passwordInput" placeholder="Nhập mật khẩu" [readonly]="isUpdate">
+                <div *ngIf="f['password'].touched && f['password'].invalid || backendErrors.password" class="text-danger">
+                  <small *ngIf="f['password'].errors?.['required']">Mật khẩu là bắt buộc</small>
+                  <small *ngIf="backendErrors.password">{{ backendErrors.password }}</small>
+                </div>
+              </div>
+              
+              <div class="form-group mb-3">
+                <label for="confirmPasswordInput" class="form-label">Xác nhận mật khẩu</label>
+                <input type="password" [formControlName]="'confirmPassword'" class="form-control" id="confirmPasswordInput" placeholder="Xác nhận mật khẩu">
+                <div *ngIf="f['confirmPassword'].touched && f['confirmPassword'].invalid || backendErrors.confirmPassword" class="text-danger">
+                  <small *ngIf="f['confirmPassword'].errors?.['required']">Xác nhận mật khẩu là bắt buộc</small>
+                  <small *ngIf="backendErrors.confirmPassword">{{ backendErrors.confirmPassword }}</small>
+                </div>
+              </div>
+              <div class="form-group mb-3">
+                <label for="emailInput" class="form-label">Email</label>
+                <input type="email" [formControlName]="'email'" class="form-control" id="emailInput" placeholder="Nhập email">
+                <div *ngIf="f['email'].touched && f['email'].invalid || backendErrors.email" class="text-danger">
+                  <small *ngIf="f['email'].errors?.['required']">Email là bắt buộc</small>
+                  <small *ngIf="f['email'].errors?.['email']">Email không hợp lệ</small>
+                  <small *ngIf="backendErrors.email">{{ backendErrors.email }}</small>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          <div *ngIf="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="studentForm.invalid">Lưu thông tin</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

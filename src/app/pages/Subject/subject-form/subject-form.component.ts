@@ -21,7 +21,7 @@ export class SubjectFormComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
 
-    // Lắng nghe sự kiện khi chọn môn học để cập nhật
+    // Lắng nghe sự kiện khi chọn môn học để tải dữ liệu cập nhật
     this.subjectService.selectedSubject$.subscribe(subjectData => {
       if (subjectData) {
         this.loadSubjectData(subjectData);
@@ -29,14 +29,15 @@ export class SubjectFormComponent implements OnInit {
     });
   }
 
+
   initializeForm() {
     this.subjectForm = this.fb.group({
       subjectsID: [''],
-      subjectsCode: [{ value: '', disabled: this.isUpdate }, Validators.required],
+      subjectsCode: ['', Validators.required],  // Giả sử đây là trường bắt buộc
       subjectsName: ['', Validators.required]
     });
-    this.setFormValidators();
   }
+
 
   setFormValidators() {
     if (this.isUpdate) {

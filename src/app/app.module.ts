@@ -10,16 +10,22 @@ import { ClassFormComponent } from './pages/class/class-form/class-form.componen
 import { ClassTableComponent } from './pages/class/class-table/class-table.component';
 import { ClassComponent } from './pages/class/class.component';
 
-
 // Import các component cho question
 import { QuestionFormComponent } from './pages/question/question-form/question-form.component';
 import { QuestionTableComponent } from './pages/question/question-table/question-table.component';
 import { QuestionComponent } from './pages/question/question.component';
+
 // Import các component cho student
-import { StudentComponent } from './pages/student/student.component';
 import { StudentFormComponent } from './pages/student/student-form/student-form.component';
 import { StudentTableComponent } from './pages/student/student-table/student-table.component';
-import { ReactiveFormsModule } from '@angular/forms';  // Import this module
+import { StudentComponent } from './pages/student/student.component';
+
+// Import các component cho subject
+import { SubjectFormComponent } from './pages/Subject/subject-form/subject-form.component'; // Thêm SubjectFormComponent
+import { SubjectTableComponent } from './pages/Subject/subject-table/subject-table.component'; // Thêm SubjectTableComponent
+import { SubjectComponent } from './pages/Subject/subject.componet'; // Thêm component Subject
+
+import { ReactiveFormsModule } from '@angular/forms'; // Import this module
 
 @NgModule({
   declarations: [
@@ -34,7 +40,11 @@ import { ReactiveFormsModule } from '@angular/forms';  // Import this module
     QuestionFormComponent,
     StudentComponent,
     StudentFormComponent,
-    StudentTableComponent
+    StudentTableComponent,
+    // Khai báo các component của Subject
+    SubjectComponent,
+    SubjectFormComponent,
+    SubjectTableComponent
   ],
   imports: [
     BrowserModule,

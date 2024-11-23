@@ -77,6 +77,26 @@
             </div>
           </div>
 
+          <!-- Loại câu hỏi -->
+          <div class="mb-3">
+            <label for="questionTypeSelect" class="form-label">Loại câu
+              hỏi</label>
+            <select class="form-select" id="questionTypeSelect"
+              formControlName="questionTypeID">
+              <option value>Chọn loại câu hỏi</option>
+              <option *ngFor="let questionType of questionTypes"
+                [value]="questionType.questionTypeID">
+                {{ questionType.questionTypeName }}
+              </option>
+            </select>
+            <div
+              *ngIf="questionForm.get('questionTypeID')?.invalid && questionForm.get('questionTypeID')?.touched"
+              class="text-danger">
+              Loại câu hỏi là bắt buộc.
+            </div>
+          </div>
+
+          <!-- Môn học -->
           <div class="mb-3">
             <label for="subjectSelect" class="form-label">Môn học</label>
             <select class="form-select" id="subjectSelect"

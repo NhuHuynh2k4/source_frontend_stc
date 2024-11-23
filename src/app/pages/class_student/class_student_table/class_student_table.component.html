@@ -44,8 +44,12 @@
           <tbody>
             <tr *ngFor="let classStudent of classStudents; let i = index">
               <td>{{ i + 1 }}</td>
-              <td>{{ classStudent.classID }}</td>
-              <td>{{ classStudent.studentID }}</td>
+              <td>
+                {{ getClassDetails(classStudent.classID) }} 
+              </td>
+              <td>
+                {{ getStudentDetails(classStudent.studentID) }}
+              </td>
               <td>
                 <i class="fas fa-pencil icon" title="Chỉnh sửa"
                   (click)="onEdit(classStudent.class_StudentID)"

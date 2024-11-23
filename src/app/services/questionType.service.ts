@@ -8,6 +8,7 @@ import { QuestionType } from '../pages/question_type/question_type.model';
 })
 export class QuestionTypeService {
     private apiUrl = 'http://localhost:5198/api/QuestionType'; // URL của API
+    private apiUrlQuestion = 'http://localhost:5198/api/Question';
 
     constructor(private http: HttpClient) { }
 
@@ -17,6 +18,11 @@ export class QuestionTypeService {
     setSelectedQuestionType(questionType: any) {
         this.selectedQuestionType.next(questionType);
     }
+
+    getQuestion(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrlQuestion}/get-all`);
+      }
+      
 
     // Lấy danh sách tất cả các học sinh lớp
     getQuestionType(): Observable<QuestionType[]> {

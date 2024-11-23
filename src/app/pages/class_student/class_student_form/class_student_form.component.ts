@@ -15,6 +15,8 @@ export class ClassStudentFormComponent implements OnInit {
   backendErrors: any = {};
   successMessage: string = '';
   selectedClassStudent: any = {};
+  classList: any[] = []; // Danh sách các lớp học
+  studentList: any[] = []; // Danh sách học sinh
 
   constructor(
     private fb: FormBuilder,
@@ -27,6 +29,30 @@ export class ClassStudentFormComponent implements OnInit {
     this.classStudentService.selectedClassStudent$.subscribe(classStudent => {
       if (classStudent) {
         this.loadClassStudentData(classStudent);
+      }
+    });
+    this.fetchClasses();
+    this.fetchStudents();
+  }
+
+  fetchClasses(): void {
+    this.classStudentService.getClasses().subscribe({
+      next: (data: any[]) => {
+        this.classList = data;
+      },
+      error: () => {
+        this.toastrService.error('Không thể tải danh sách lớp', 'Lỗi');
+      }
+    });
+  }
+
+  fetchStudents(): void {
+    this.classStudentService.getStudents().subscribe({
+      next: (data: any[]) => {
+        this.studentList = data;
+      },
+      error: () => {
+        this.toastrService.error('Không thể tải danh sách học sinh', 'Lỗi');
       }
     });
   }
@@ -66,34 +92,38 @@ export class ClassStudentFormComponent implements OnInit {
   showError(message: string, title: string): void {
     this.toastrService.error(message, title);
   }
-
+  
   onSubmit(): void {
     this.backendErrors = {};
     this.successMessage = '';
     this.classStudentForm.markAllAsTouched();
-
+  
     if (this.classStudentForm.invalid) {
       return;
     }
-
+  
     const classStudentData = this.classStudentForm.getRawValue();
-
+  
     const apiCall = this.isUpdate
       ? this.classStudentService.updateClassStudent(classStudentData)
       : this.classStudentService.addClassStudent(classStudentData);
-
+  
     apiCall.subscribe({
       next: response => {
         if (response && response.message) {
           this.successMessage = response.message;
-
+  
+          // Đóng modal sau khi thành công
           const modalElement = document.getElementById('exampleModal');
           if (modalElement) {
             const modal = new (window as any).bootstrap.Modal(modalElement);
-            modal.hide();
-          }
+            modal.hide(); // Đảm bảo modal được đóng
+            this.closeModal();
 
+          }
+  
           this.resetForm();
+          this.toastrService.success(response.message, 'Thành công');
         }
       },
       error: error => {
@@ -102,6 +132,14 @@ export class ClassStudentFormComponent implements OnInit {
     });
   }
 
+  closeModal(): void {
+    const modalElement = document.getElementById('exampleModal');
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.hide();
+    }
+  }
+  
   handleBackendErrors(error: any): void {
     if (error.status === 409 && error.error) {
       if (error.error.includes('classID')) {

@@ -15,6 +15,7 @@ export class QuestionTypeFormComponent implements OnInit {
   backendErrors: any = {};
   successMessage: string = '';
   selectedQuestionType: any = {};
+  questionTypeList: any[] = []; // Danh sách mã loại câu hỏi
   
   constructor(
     private fb: FormBuilder,
@@ -24,10 +25,22 @@ export class QuestionTypeFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.loadQuestionTypeList(); // Gọi API lấy danh sách mã loại câu hỏi
     this.questionTypeService.selectedQuestionType$.subscribe(questionType => {
       if (questionType) {
         this.loadQuestionTypeData(questionType);
       }
+    });
+  }
+
+  loadQuestionTypeList(): void {
+    this.questionTypeService.getQuestionType().subscribe({
+      next: (data) => {
+        this.questionTypeList = data;
+      },
+      error: (err) => {
+        this.toastrService.error('Không thể tải danh sách loại câu hỏi', 'Lỗi');
+      },
     });
   }
 

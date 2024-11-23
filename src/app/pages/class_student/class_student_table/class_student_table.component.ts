@@ -13,6 +13,8 @@ export class ClassStudentTableComponent implements OnInit {
   isUpdate: boolean = false;
   classStudents: any[] = [];
   selectedClassStudent: any = {};
+  classList: any[] = []; // Danh sách các lớp học
+  studentList: any[] = []; // Danh sách học sinh
 
   constructor(
     private classStudentService: ClassStudentService,
@@ -29,6 +31,30 @@ export class ClassStudentTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchClassStudents();
+    this.fetchClasses();
+    this.fetchStudents();
+  }
+
+  fetchClasses(): void {
+    this.classStudentService.getClasses().subscribe({
+      next: (data: any[]) => {
+        this.classList = data;
+      },
+      error: () => {
+        this.toastrService.error('Không thể tải danh sách lớp', 'Lỗi');
+      }
+    });
+  }
+
+  fetchStudents(): void {
+    this.classStudentService.getStudents().subscribe({
+      next: (data: any[]) => {
+        this.studentList = data;
+      },
+      error: () => {
+        this.toastrService.error('Không thể tải danh sách học sinh', 'Lỗi');
+      }
+    });
   }
 
   // Fetch the list of class students
@@ -41,6 +67,18 @@ export class ClassStudentTableComponent implements OnInit {
         this.toastrService.error('Lỗi khi lấy danh sách học sinh', 'Error');
       }
     );
+  }
+
+  // Get class details by classID
+  getClassDetails(classID: number): string {
+    const classInfo = this.classList.find(cls => cls.classID === classID);
+    return classInfo ? `${classInfo.classID} - ${classInfo.classCode} - ${classInfo.className}` : 'Không có thông tin';
+  }
+
+  // Get student details by studentID
+  getStudentDetails(studentID: number): string {
+    const studentInfo = this.studentList.find(stu => stu.studentID === studentID);
+    return studentInfo ? `${studentInfo.studentID} - ${studentInfo.studentCode} - ${studentInfo.studentName}` : 'Không có thông tin';
   }
 
   // Edit a class student

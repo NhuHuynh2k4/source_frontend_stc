@@ -8,6 +8,8 @@ import { ClassStudent } from '../pages/class_student/class_student.model';  // I
 })
 export class ClassStudentService {
     private apiUrl = 'http://localhost:5198/api/ClassStudent'; // URL của API
+    private apiUrlClass = 'http://localhost:5198/api/Class';
+    private apiUrlStudent = 'http://localhost:5198/api/Student';
 
     constructor(private http: HttpClient) { }
 
@@ -16,6 +18,14 @@ export class ClassStudentService {
 
     setSelectedClassStudent(classStudent: any) {
         this.selectedClassStudent.next(classStudent);
+    }
+
+    getClasses(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrlClass}/get-all`);
+    }
+
+    getStudents(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrlStudent}/get-all`);
     }
 
     // Lấy danh sách tất cả các học sinh lớp

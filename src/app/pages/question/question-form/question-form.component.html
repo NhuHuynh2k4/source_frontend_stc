@@ -54,7 +54,7 @@
           <div class="mb-3">
             <label for="questionImgContentInput" class="form-label">Nội dung
               hình ảnh</label>
-            <input type="text" class="form-control" id="questionImgContentInput"
+            <input type="file" class="form-control" id="questionImgContentInput"
               formControlName="questionImgContent"
               placeholder="Nhập nội dung hình ảnh">
           </div>
@@ -65,8 +65,10 @@
             <select class="form-select" id="questionTypeSelect"
               formControlName="questionTypeID">
               <option value>Chọn loại câu hỏi</option>
-              <!-- Đảm bảo bạn có danh sách các loại câu hỏi để hiển thị ở đây -->
-              <!-- <option *ngFor="let type of questionTypes" [value]="type.id">{{ type.name }}</option> -->
+              <option *ngFor="let questionType of questionTypes"
+                [value]="questionType.questionTypeID">
+                {{ questionType.questionTypeName }}
+              </option>
             </select>
             <div
               *ngIf="questionForm.get('questionTypeID')?.invalid && questionForm.get('questionTypeID')?.touched"
@@ -80,8 +82,10 @@
             <select class="form-select" id="subjectSelect"
               formControlName="subjectsID">
               <option value>Chọn môn học</option>
-              <!-- Đảm bảo bạn có danh sách các môn học để hiển thị ở đây -->
-              <!-- <option *ngFor="let subject of subjects" [value]="subject.id">{{ subject.name }}</option> -->
+              <option *ngFor="let subject of subjects"
+                [value]="subject.subjectsID">
+                {{ subject.subjectsName }}
+              </option>
             </select>
             <div
               *ngIf="questionForm.get('subjectsID')?.invalid && questionForm.get('subjectsID')?.touched"

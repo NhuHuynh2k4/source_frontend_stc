@@ -21,15 +21,15 @@ export class StudentFormComponent implements OnInit {
     public alertService: AlertService
   ) {}
 
-  
+
   ngOnInit(): void {
     this.initializeForm();
 
     this.studentService.selectedStudent$.subscribe(
-      studentData => { 
-        if (studentData) { 
-          this.loadStudentData(studentData); 
-        } 
+      studentData => {
+        if (studentData) {
+          this.loadStudentData(studentData);
+        }
       }
     );
 
@@ -41,31 +41,31 @@ export class StudentFormComponent implements OnInit {
   }
 
   initializeForm() {
-    this.studentForm = this.fb.group({ 
-      studentID: [''], 
-      studentCode: [{ value: '', 
+    this.studentForm = this.fb.group({
+      studentID: [''],
+      studentCode: [{ value: '',
       disabled: this.isUpdate },
-      Validators.required], 
-      studentName: ['', Validators.required], 
-      numberPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]], 
-      email: ['', [Validators.required, Validators.email]], 
-      address: ['', Validators.required], 
+      Validators.required],
+      studentName: ['', Validators.required],
+      numberPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', Validators.required],
       birthdayDate: ['', [Validators.required, dateLessThanTodayValidator()]], // Thêm Validator tùy chỉnh
-      gender: [true, Validators.required], 
-      password: [''], 
-      confirmPassword: [''] }); 
+      gender: [true, Validators.required],
+      password: [''],
+      confirmPassword: [''] });
       this.setFormValidators(); }
-   setFormValidators() { if (this.isUpdate) { 
-    this.studentForm.get('password')?.clearValidators(); 
+   setFormValidators() { if (this.isUpdate) {
+    this.studentForm.get('password')?.clearValidators();
     this.studentForm.get('confirmPassword')?.clearValidators(); } else
-    { this.studentForm.get('password')?.setValidators([Validators.required]); 
-    this.studentForm.get('confirmPassword')?.setValidators([Validators.required]); } 
-    this.studentForm.get('password')?.updateValueAndValidity(); this.studentForm.get('confirmPassword')?.updateValueAndValidity(); 
+    { this.studentForm.get('password')?.setValidators([Validators.required]);
+    this.studentForm.get('confirmPassword')?.setValidators([Validators.required]); }
+    this.studentForm.get('password')?.updateValueAndValidity(); this.studentForm.get('confirmPassword')?.updateValueAndValidity();
   }
 
   loadStudentData(studentData: any): void {
     this.isUpdate = true; // Đặt trạng thái cập nhật trước khi nạp dữ liệu
-  
+
     this.studentForm.patchValue({
       studentID: studentData.studentID,
       studentCode: studentData.studentCode,
@@ -76,10 +76,10 @@ export class StudentFormComponent implements OnInit {
       email: studentData.email,
       birthdayDate: studentData.birthdayDate.split('T')[0]
     });
-  
+
     this.setFormValidators(); // Cập nhật validators dựa trên trạng thái cập nhật
   }
-  
+
   resetForm() {
     this.studentForm.reset({
       studentID: '',
@@ -93,10 +93,10 @@ export class StudentFormComponent implements OnInit {
       password: '',
       confirmPassword: ''
     });
-  
+
     this.isUpdate = false;
     this.setFormValidators(); // Đặt lại validators khi thêm mới
-  
+
     this.successMessage = '';
     this.backendErrors = {};
   }
@@ -121,23 +121,23 @@ export class StudentFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.backendErrors = {};  
+    this.backendErrors = {};
     this.successMessage = '';  // Reset thông báo thành công mỗi khi submit
     this.studentForm.markAllAsTouched();
-  
+
     if (this.studentForm.invalid) {
       return;
     }
-  
-    const studentData = this.studentForm.getRawValue();  
-  
+
+    const studentData = this.studentForm.getRawValue();
+
     if (this.isUpdate) {
       delete studentData.password;
       delete studentData.confirmPassword;
     } else {
       delete studentData.confirmPassword;
     }
-  
+
     const apiCall = this.isUpdate ? this.studentService.updateStudent(studentData) : this.studentService.createStudent(studentData);
     apiCall.subscribe({
       next: response => {
@@ -154,7 +154,7 @@ export class StudentFormComponent implements OnInit {
             const modal = new (window as any).bootstrap.Modal(modalElement);
             modal.hide();
           }
-          
+
           // Reset form sau khi modal đóng
           this.resetForm();
         } else {

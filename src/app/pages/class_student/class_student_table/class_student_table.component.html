@@ -13,8 +13,12 @@
     <div class="w-50">
       <form class="d-flex nav-search-form me-3">
         <i class="fa fa-search nav-fa-search"></i>
-        <input class="form-control me-2 nav-search-input" type="search"
-          placeholder="Tìm kiếm" aria-label="Search">
+        <input
+          class="form-control me-2 nav-search-input"
+          type="search"
+          placeholder="Tìm kiếm"
+          aria-label="Search"
+          (keyup)="onSearch($event)">
       </form>
     </div>
     <div class="button-container">

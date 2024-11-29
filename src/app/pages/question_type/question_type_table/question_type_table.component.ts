@@ -22,6 +22,8 @@ export class QuestionTypeTableComponent implements OnInit {
   totalPages: number = 0;
   pages: number[] = [];
 
+  searchText: string = '';
+
   constructor(
     private questionTypeService: QuestionTypeService,
     private fb: FormBuilder
@@ -35,6 +37,29 @@ export class QuestionTypeTableComponent implements OnInit {
   ngOnInit(): void {
     this.fetchQuestionTypes();
     this.calculatePagination();
+  }
+
+  onSearch(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value.toLowerCase(); // Lấy giá trị tìm kiếm và chuyển về chữ thường
+    this.searchText = inputValue;
+    this.filterClassStudents();
+  }
+  
+  filterClassStudents(): void {
+    if (this.searchText) {
+      this.paginatedQuestionType = this.questionTypes.filter((item) => {
+        const questionTypeCode = item.questionTypeCode?.toString().toLowerCase() || '';
+        const questionTypeName = item.questionTypeName?.toString().toLowerCase() || '';
+        
+        // So sánh giá trị tìm kiếm với ClassID, StudentID hoặc Ngày tạo
+        return (
+          questionTypeCode.includes(this.searchText) ||
+          questionTypeName.includes(this.searchText)
+        );
+      });
+    } else {
+      this.calculatePagination(); // Nếu không nhập gì, hiển thị lại dữ liệu đầy đủ
+    }
   }
 
   fetchQuestionTypes(): void {
@@ -164,6 +189,7 @@ export class QuestionTypeTableComponent implements OnInit {
   updatePagination(): void {
     const startIndex = (this.currentPage - 1) * this.rowsPerPage;
     const endIndex = startIndex + this.rowsPerPage;
+    const dataToPaginate = this.searchText ? this.paginatedQuestionType : this.questionTypes;
     this.paginatedQuestionType = this.questionTypes.slice(startIndex, endIndex);
   }
 

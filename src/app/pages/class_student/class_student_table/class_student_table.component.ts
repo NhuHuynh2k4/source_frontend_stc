@@ -25,6 +25,8 @@ export class ClassStudentTableComponent implements OnInit {
   totalPages: number = 0;
   pages: number[] = [];
 
+  searchText: string = '';
+
   constructor(
     private classStudentService: ClassStudentService,
     private fb: FormBuilder
@@ -33,6 +35,33 @@ export class ClassStudentTableComponent implements OnInit {
       class_StudentID: [''],
       class_StudentName: [''],
     });
+  }
+
+  onSearch(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value.toLowerCase(); // Lấy giá trị tìm kiếm và chuyển về chữ thường
+    this.searchText = inputValue;
+    this.filterClassStudents();
+  }
+  
+  filterClassStudents(): void {
+    if (this.searchText) {
+      this.paginatedClassStudents = this.classStudents.filter((item) => {
+        const classID = item.classID?.toString().toLowerCase() || '';
+        const studentID = item.studentID?.toString().toLowerCase() || '';
+        const createDate = item.createDate
+          ? new Date(item.createDate).toLocaleDateString('vi-VN')
+          : '';
+  
+        // So sánh giá trị tìm kiếm với ClassID, StudentID hoặc Ngày tạo
+        return (
+          classID.includes(this.searchText) ||
+          studentID.includes(this.searchText) ||
+          createDate.includes(this.searchText)
+        );
+      });
+    } else {
+      this.calculatePagination(); // Nếu không nhập gì, hiển thị lại dữ liệu đầy đủ
+    }
   }
 
   showSuccess(message: string, title: string): void {
@@ -203,6 +232,7 @@ export class ClassStudentTableComponent implements OnInit {
   updatePagination(): void {
     const startIndex = (this.currentPage - 1) * this.rowsPerPage;
     const endIndex = startIndex + this.rowsPerPage;
+    const dataToPaginate = this.searchText ? this.paginatedClassStudents : this.classStudents;
     this.paginatedClassStudents = this.classStudents.slice(startIndex, endIndex);
   }
 

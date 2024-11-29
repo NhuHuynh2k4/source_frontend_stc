@@ -10,23 +10,26 @@
         <!-- Form bên trong Modal -->
         <form [formGroup]="questionTypeForm" (ngSubmit)="onSubmit()">
           <div class="row">
-            <!-- Cột 1 -->
             <div class="">
               <div class="form-group">
                 <label for="questionTypeCode" class="form-label">Mã loại câu hỏi</label>
-                <input type="text" formControlName="questionTypeCode" class="form-control" id="questionTypeCode" name="questionTypeCode" placeholder="Nhập mã loại câu hỏi">
+                <select formControlName="questionTypeCode" class="form-control" id="questionTypeCode" name="questionTypeCode">
+                  <option *ngFor="let type of questionTypeList" [value]="type.questionTypeCode">
+                    {{ type.questionTypeCode }} - {{ type.questionTypeName }}
+                  </option>
+                </select>
                 <div *ngIf="f['questionTypeCode'].touched && f['questionTypeCode'].invalid" class="text-danger">
-                  <small *ngIf="f['questionTypeCode'].errors?.['required']">Mã loại câu hỏi là bắt buộc</small>
+                  <small *ngIf="f['questionTypeCode'].errors?.['required']">Mã loại câu hỏi không được bỏ trống</small>
                 </div>
                 <div *ngIf="backendErrors.questionTypeCode" class="text-danger">
                   <small>{{ backendErrors.questionTypeCode }}</small>
                 </div>
-              </div>
+              </div>              
               <div class="form-group ">
                 <label for="questionTypeName" class="form-label">Tên loại câu hỏi</label>
                 <input type="text" formControlName="questionTypeName" class="form-control" id="questionTypeName" name="questionTypeName" placeholder="Nhập tên loại câu hỏi">
                 <div *ngIf="f['questionTypeName'].touched && f['questionTypeName'].invalid" class="text-danger">
-                  <small *ngIf="f['questionTypeName'].errors?.['required']">Tên loại câu hỏi là bắt buộc</small>
+                  <small *ngIf="f['questionTypeName'].errors?.['required']">Tên loại câu hỏi không được bỏ trống</small>
                 </div>
                 <div *ngIf="backendErrors.questionTypeName" class="text-danger">
                   <small>{{ backendErrors.questionTypeName }}</small>

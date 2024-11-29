@@ -1,42 +1,59 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetForm()">
+<div class="modal fade" id="exampleModal" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true"
+  (hidden.bs.modal)="resetForm()">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">
-          {{ isUpdate ? 'Cập nhật thông tin học sinh lớp' : 'Thêm mới thông tin học sinh lớp' }}
+          {{ isUpdate ? 'Cập nhật thông tin học sinh lớp' :
+          'Thêm mới thông tin học sinh lớp' }}
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="classStudentForm" (ngSubmit)="onSubmit()">
           <div class="row">
-            <div class="col-6">
-              <div class="form-group">
-                <label for="classID" class="form-label">Mã lớp</label>
-                <input type="number" formControlName="classID" class="form-control" id="classID" placeholder="Nhập mã lớp">
-                <div *ngIf="classStudentForm.controls['classID'].invalid && classStudentForm.controls['classID'].touched" class="text-danger">
-                  <small *ngIf="classStudentForm.controls['classID'].hasError('required')">Mã lớp là bắt buộc</small>
-                  <small *ngIf="classStudentForm.controls['classID'].hasError('min')">Mã lớp phải lớn hơn 0</small>
-                </div>
+            <div class="form-group">
+              <label for="classID" class="form-label">Mã lớp</label>
+              <select formControlName="classID" class="form-control"
+                id="classID">
+                <option value>Chọn mã lớp</option>
+                <option *ngFor="let class of classList" [value]="class.classID">
+                  {{ class.classCode }} - {{ class.className }}
+                </option>
+              </select>
+              <div *ngIf="f['classID'].invalid && f['classID'].touched"
+                class="text-danger">
+                <small *ngIf="f['classID'].hasError('required')">Mã lớp không
+                  được bỏ trống</small>
               </div>
             </div>
-            <div class="col-6">
-              <div class="form-group">
-                <label for="studentID" class="form-label">Mã học sinh</label>
-                <input type="number" formControlName="studentID" class="form-control" id="studentID" placeholder="Nhập mã học sinh">
-                <div *ngIf="classStudentForm.controls['studentID'].invalid && classStudentForm.controls['studentID'].touched" class="text-danger">
-                  <small *ngIf="classStudentForm.controls['studentID'].hasError('required')">Mã học sinh là bắt buộc</small>
-                  <small *ngIf="classStudentForm.controls['studentID'].hasError('min')">Mã học sinh phải lớn hơn 0</small>
-                </div>
+            <div class="form-group">
+              <label for="studentID" class="form-label">Mã học sinh</label>
+              <select formControlName="studentID" class="form-control"
+                id="studentID">
+                <option value>Chọn mã học sinh</option>
+                <option *ngFor="let student of studentList"
+                  [value]="student.studentID">
+                  {{ student.studentCode }} - {{ student.studentName }}
+                </option>
+              </select>
+              <div *ngIf="f['studentID'].invalid && f['studentID'].touched"
+                class="text-danger">
+                <small *ngIf="f['studentID'].hasError('required')">Mã học sinh
+                  không được bỏ trống</small>
               </div>
             </div>
           </div>
           <div *ngIf="successMessage" class="alert alert-success">
             {{ successMessage }}
           </div>
+          <br />
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-secondary"
+              data-bs-dismiss="modal">Đóng</button>
             <button type="submit" class="btn btn-dark">
               {{ isUpdate ? 'Cập nhật' : 'Lưu' }}
             </button>

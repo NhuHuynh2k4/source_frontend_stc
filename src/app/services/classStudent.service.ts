@@ -52,5 +52,9 @@ export class ClassStudentService {
         return this.http.delete(`${this.apiUrl}/delete/${class_StudentID}`);
     }
 
+    exportToExcel(): Observable<Blob> {
+        return this.http.get(`${this.apiUrl}/export`, { responseType: 'blob' });
+    }
+
 }
 

@@ -1,8 +1,9 @@
 <div class="container mt-4 mb-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/"><i
-            class="fas fa-house"></i><span>Trang chủ</span></a></li>
+      <li class="breadcrumb-item">
+        <a href="/"><i class="fas fa-house"></i><span>Trang chủ</span></a>
+      </li>
       <li class="breadcrumb-item"><a href="/class-student">Học Sinh Lớp</a></li>
       <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
     </ol>
@@ -17,8 +18,9 @@
       </form>
     </div>
     <div class="button-container">
-      <button class="btn btn-outline-dark"><i class="fas fa-download"></i><span
-          class="ps-2">Xuất excel</span></button>
+      <button class="btn btn-outline-dark" (click)="exportExcel()">
+        <i class="fas fa-download"></i><span class="ps-2">Xuất excel</span>
+      </button>
       <button type="button" class="btn btn-dark" data-bs-toggle="modal"
         data-bs-target="#exampleModal">
         <i class="fas fa-plus"></i><span class="ps-2">Thêm mới</span>
@@ -29,27 +31,42 @@
   <div class="container mt-4 p-0">
     <div class="card">
       <div class="card-header" style="background-color: #fff;">
-        <h5 class="m-2">Danh sách học sinh lớp...</h5>
+        <h5 class="m-2">Danh sách học sinh lớp</h5>
       </div>
       <div class="card-body p-0">
+        <div class="d-flex justify-content-between align-items-center p-3">
+          <!-- Dropdown to select rows per page -->
+          <div>
+            <label for="rowsPerPage" class="form-label me-2">Hiển thị:</label>
+            <select id="rowsPerPage" class="form-select form-select-sm w-auto"
+              (change)="onRowsPerPageChange($event)">
+              <option value="5" selected>5 dòng</option>
+              <option value="10">10 dòng</option>
+              <option value="15">15 dòng</option>
+              <option value="20">20 dòng</option>
+            </select>
+          </div>
+        </div>
+
         <table class="table table-bordered mb-0">
           <thead class="table-secondary table-borderless">
             <tr>
               <th>STT</th>
               <th>ID Lớp</th>
               <th>ID Học Sinh</th>
+              <th>Ngày tạo</th>
+              <th>Ngày cập nhật</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let classStudent of classStudents; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>
-                {{ getClassDetails(classStudent.classID) }} 
-              </td>
-              <td>
-                {{ getStudentDetails(classStudent.studentID) }}
-              </td>
+            <tr
+              *ngFor="let classStudent of paginatedClassStudents; let i = index">
+              <td>{{ (currentPage - 1) * rowsPerPage + i + 1 }}</td>
+              <td>{{ getClassDetails(classStudent.classID) }}</td>
+              <td>{{ getStudentDetails(classStudent.studentID) }}</td>
+              <td>{{classStudent.createDate | date: 'HH:mm:ss dd/MM/yyyy'}}</td>
+              <td>{{classStudent.updateDate | date: 'HH:mm:ss dd/MM/yyyy'}}</td>
               <td>
                 <i class="fas fa-pencil icon" title="Chỉnh sửa"
                   (click)="onEdit(classStudent.class_StudentID)"
@@ -63,14 +80,22 @@
       </div>
       <div
         class="card-footer d-flex justify-content-between align-items-center bg-white border-top-0">
-        <div>Trang 1 của 10</div>
-        <nav aria-label="...">
+        <div>Trang {{ currentPage }} của {{ totalPages }}</div>
+        <nav aria-label="Pagination">
           <ul class="pagination pagination-sm mb-0">
-            <li class="page-item active" aria-current="page">
-              <span class="page-link">1</span>
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link"
+                (click)="onPageChange(currentPage - 1)">Trước</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item" *ngFor="let page of pages"
+              [class.active]="page === currentPage">
+              <a class="page-link" (click)="onPageChange(page)">{{ page
+                }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link"
+                (click)="onPageChange(currentPage + 1)">Sau</a>
+            </li>
           </ul>
         </nav>
       </div>

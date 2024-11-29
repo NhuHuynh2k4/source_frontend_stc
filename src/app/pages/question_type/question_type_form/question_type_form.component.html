@@ -10,18 +10,7 @@
         <!-- Form bên trong Modal -->
         <form [formGroup]="questionTypeForm" (ngSubmit)="onSubmit()">
           <div class="row">
-            <!-- Cột 1 -->
             <div class="">
-              <!-- <div class="form-group">
-                <label for="questionTypeCode" class="form-label">Mã loại câu hỏi</label>
-                <input type="text" formControlName="questionTypeCode" class="form-control" id="questionTypeCode" name="questionTypeCode" placeholder="Nhập mã loại câu hỏi">
-                <div *ngIf="f['questionTypeCode'].touched && f['questionTypeCode'].invalid" class="text-danger">
-                  <small *ngIf="f['questionTypeCode'].errors?.['required']">Mã loại câu hỏi là bắt buộc</small>
-                </div>
-                <div *ngIf="backendErrors.questionTypeCode" class="text-danger">
-                  <small>{{ backendErrors.questionTypeCode }}</small>
-                </div>
-              </div> -->
               <div class="form-group">
                 <label for="questionTypeCode" class="form-label">Mã loại câu hỏi</label>
                 <select formControlName="questionTypeCode" class="form-control" id="questionTypeCode" name="questionTypeCode">

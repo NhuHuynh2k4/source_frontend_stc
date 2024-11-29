@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClassStudentService } from 'src/app/services/classStudent.service';
-import { ToastrService } from 'ngx-toastr';
-import { positiveNumberValidator } from './positive_Number.Validator '; // Import hàm validator
+import Swal from 'sweetalert2';
+import { positiveNumberValidator } from './positive_Number.Validator ';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-class-student-form',
@@ -15,13 +16,12 @@ export class ClassStudentFormComponent implements OnInit {
   backendErrors: any = {};
   successMessage: string = '';
   selectedClassStudent: any = {};
-  classList: any[] = []; // Danh sách các lớp học
-  studentList: any[] = []; // Danh sách học sinh
+  classList: any[] = [];
+  studentList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private classStudentService: ClassStudentService,
-    private toastrService: ToastrService
+    private classStudentService: ClassStudentService
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +33,7 @@ export class ClassStudentFormComponent implements OnInit {
     });
     this.fetchClasses();
     this.fetchStudents();
+    
   }
 
   fetchClasses(): void {
@@ -41,7 +42,7 @@ export class ClassStudentFormComponent implements OnInit {
         this.classList = data;
       },
       error: () => {
-        this.toastrService.error('Không thể tải danh sách lớp', 'Lỗi');
+        this.showError('Không thể tải danh sách lớp', 'Lỗi');
       }
     });
   }
@@ -52,7 +53,7 @@ export class ClassStudentFormComponent implements OnInit {
         this.studentList = data;
       },
       error: () => {
-        this.toastrService.error('Không thể tải danh sách học sinh', 'Lỗi');
+        this.showError('Không thể tải danh sách học sinh', 'Lỗi');
       }
     });
   }
@@ -60,8 +61,8 @@ export class ClassStudentFormComponent implements OnInit {
   initializeForm(): void {
     this.classStudentForm = this.fb.group({
       class_StudentID: [''],
-      classID: [null, [Validators.required, Validators.min(1)]],  // Sử dụng validator tùy chỉnh tại đây
-      studentID: [null, [Validators.required, Validators.min(1)]] // Sử dụng validator tùy chỉnh tại đây
+      classID: [null, [Validators.required, Validators.min(1)]],
+      studentID: [null, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -86,44 +87,58 @@ export class ClassStudentFormComponent implements OnInit {
   }
 
   showSuccess(message: string, title: string): void {
-    this.toastrService.success(message, title);
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: 'success',
+      confirmButtonText: 'OK',
+      didOpen: () => {
+        const swalPopup = document.querySelector('.swal2-container') as HTMLElement;
+        if (swalPopup) {
+          swalPopup.style.zIndex = '9999';
+        }
+      }
+    });
   }
 
   showError(message: string, title: string): void {
-    this.toastrService.error(message, title);
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+      didOpen: () => {
+        const swalPopup = document.querySelector('.swal2-container') as HTMLElement;
+        if (swalPopup) {
+          swalPopup.style.zIndex = '9999';
+        }
+      }
+    });
   }
-  
+
   onSubmit(): void {
     this.backendErrors = {};
     this.successMessage = '';
     this.classStudentForm.markAllAsTouched();
-  
+
     if (this.classStudentForm.invalid) {
       return;
     }
-  
+
     const classStudentData = this.classStudentForm.getRawValue();
-  
+
     const apiCall = this.isUpdate
       ? this.classStudentService.updateClassStudent(classStudentData)
       : this.classStudentService.addClassStudent(classStudentData);
-  
+
     apiCall.subscribe({
       next: response => {
         if (response && response.message) {
           this.successMessage = response.message;
-  
-          // Đóng modal sau khi thành công
-          const modalElement = document.getElementById('exampleModal');
-          if (modalElement) {
-            const modal = new (window as any).bootstrap.Modal(modalElement);
-            modal.hide(); // Đảm bảo modal được đóng
-            this.closeModal();
 
-          }
-  
+          this.closeModal();
           this.resetForm();
-          this.toastrService.success(response.message, 'Thành công');
+          this.showSuccess(response.message, 'Thành công');
         }
       },
       error: error => {
@@ -135,11 +150,12 @@ export class ClassStudentFormComponent implements OnInit {
   closeModal(): void {
     const modalElement = document.getElementById('exampleModal');
     if (modalElement) {
-      const modal = new (window as any).bootstrap.Modal(modalElement);
+      const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
       modal.hide();
+      window.location.reload();
     }
   }
-  
+
   handleBackendErrors(error: any): void {
     if (error.status === 409 && error.error) {
       if (error.error.includes('classID')) {

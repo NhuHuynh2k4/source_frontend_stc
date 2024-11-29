@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuestionTypeService } from 'src/app/services/questionType.service';
-import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-question-type-form',
@@ -15,17 +16,16 @@ export class QuestionTypeFormComponent implements OnInit {
   backendErrors: any = {};
   successMessage: string = '';
   selectedQuestionType: any = {};
-  questionTypeList: any[] = []; // Danh sách mã loại câu hỏi
-  
+  questionTypeList: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private questionTypeService: QuestionTypeService,
-    private toastrService: ToastrService
   ) { }
 
   ngOnInit(): void {
     this.initializeForm();
-    this.loadQuestionTypeList(); // Gọi API lấy danh sách mã loại câu hỏi
+    this.loadQuestionTypeList();
     this.questionTypeService.selectedQuestionType$.subscribe(questionType => {
       if (questionType) {
         this.loadQuestionTypeData(questionType);
@@ -39,7 +39,7 @@ export class QuestionTypeFormComponent implements OnInit {
         this.questionTypeList = data;
       },
       error: (err) => {
-        this.toastrService.error('Không thể tải danh sách loại câu hỏi', 'Lỗi');
+        this.showError('Không thể tải danh sách loại câu hỏi', 'Lỗi');
       },
     });
   }
@@ -73,11 +73,33 @@ export class QuestionTypeFormComponent implements OnInit {
   }
 
   showSuccess(message: string, title: string): void {
-    this.toastrService.success(message, title);
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: 'success',
+      confirmButtonText: 'OK',
+      didOpen: () => {
+        const swalPopup = document.querySelector('.swal2-container') as HTMLElement;
+        if (swalPopup) {
+          swalPopup.style.zIndex = '9999';
+        }
+      }
+    });
   }
 
   showError(message: string, title: string): void {
-    this.toastrService.error(message, title);
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+      didOpen: () => {
+        const swalPopup = document.querySelector('.swal2-container') as HTMLElement;
+        if (swalPopup) {
+          swalPopup.style.zIndex = '9999';
+        }
+      }
+    });
   }
 
   onSubmit(): void {
@@ -99,20 +121,24 @@ export class QuestionTypeFormComponent implements OnInit {
       next: response => {
         if (response && response.message) {
           this.successMessage = response.message;
-
-          const modalElement = document.getElementById('exampleModal');
-          if (modalElement) {
-            const modal = new (window as any).bootstrap.Modal(modalElement);
-            modal.hide();
-          }
-
+          this.closeModal();
           this.resetForm();
+          this.showSuccess(response.message, 'Thành công');
         }
       },
       error: error => {
         this.handleBackendErrors(error);
       }
     });
+  }
+
+  closeModal(): void {
+    const modalElement = document.getElementById('exampleModal');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+      modal.hide();
+      window.location.reload();
+    }
   }
 
   handleBackendErrors(error: any): void {
@@ -134,12 +160,4 @@ export class QuestionTypeFormComponent implements OnInit {
   get f() {
     return this.questionTypeForm.controls;
   }
-
-  // export function dateLessThanTodayValidator(): ValidatorFn {
-  //   return (control: AbstractControl): { [key: string]: any } | null => {
-  //     const today = new Date().setHours(0, 0, 0, 0); // Lấy ngày hiện tại mà không tính giờ phút
-  //     const inputDate = new Date(control.value).setHours(0, 0, 0, 0); // Lấy ngày nhập mà không tính giờ phút
-  //     if (inputDate >= today) { return { dateInvalid: true }; } return null;
-  //   };
-  // }
 }

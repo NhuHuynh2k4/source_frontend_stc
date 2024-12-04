@@ -97,7 +97,7 @@ export class ClassStudentTableComponent implements OnInit {
     this.classStudentService.getClasses().subscribe({
       next: (data: any[]) => {
         this.classList = data;
-        this.showSuccess('Tải danh sách lớp thành công!', 'Thành công');
+        // this.showSuccess('Tải danh sách lớp thành công!', 'Thành công');
       },
       error: () => {
         this.showError('Không thể tải danh sách lớp', 'Lỗi');
@@ -109,7 +109,7 @@ export class ClassStudentTableComponent implements OnInit {
     this.classStudentService.getStudents().subscribe({
       next: (data: any[]) => {
         this.studentList = data;
-        this.showSuccess('Tải danh sách học sinh thành công!', 'Thành công');
+        // this.showSuccess('Tải danh sách học sinh thành công!', 'Thành công');
       },
       error: () => {
         this.showError('Không thể tải danh sách học sinh', 'Lỗi');

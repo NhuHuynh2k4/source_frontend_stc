@@ -43,4 +43,7 @@ export class QuestionService {
   deleteQuestion(questionId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/delete/${questionId}`);
   }
+  exportToExcel(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/export`, { responseType: 'blob' });
+}
 }

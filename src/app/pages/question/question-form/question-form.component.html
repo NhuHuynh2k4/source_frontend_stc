@@ -1,98 +1,113 @@
-<!-- Modal HTML Structure -->
 <div class="modal fade" id="questionModal" tabindex="-1"
   aria-labelledby="questionModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg"> <!-- Mở rộng modal -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="questionModalLabel">{{ isUpdate ?
-          'Cập nhật câu hỏi' : 'Thêm mới câu hỏi' }}</h5>
+        <h5 class="modal-title" id="questionModalLabel">
+          {{ isUpdate ? 'Cập nhật câu hỏi' : 'Thêm mới câu hỏi' }}
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- Question Form inside Modal -->
         <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="questionCodeInput" class="form-label">Mã câu hỏi</label>
-            <input type="text" class="form-control" id="questionCodeInput"
-              formControlName="questionCode" placeholder="Nhập mã câu hỏi">
-            <div
-              *ngIf="questionForm.get('questionCode')?.invalid && questionForm.get('questionCode')?.touched"
-              class="text-danger">
-              Mã câu hỏi là bắt buộc.
-            </div>
-            <div *ngIf="backendErrors.questionCode" class="text-danger">
-              {{ backendErrors.questionCode }}
-            </div>
-          </div>
+          <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="questionCodeInput" class="form-label">Mã câu
+                  hỏi</label>
+                <input type="text" class="form-control" id="questionCodeInput"
+                  formControlName="questionCode" placeholder="Nhập mã câu hỏi">
+                <div
+                  *ngIf="questionForm.get('questionCode')?.invalid && questionForm.get('questionCode')?.touched"
+                  class="text-danger">
+                  Mã câu hỏi là bắt buộc.
+                </div>
+                <div *ngIf="backendErrors.questionCode" class="text-danger">
+                  {{ backendErrors.questionCode }}
+                </div>
+              </div>
 
-          <div class="mb-3">
-            <label for="questionNameInput" class="form-label">Tên câu
-              hỏi</label>
-            <input type="text" class="form-control" id="questionNameInput"
-              formControlName="questionName" placeholder="Nhập tên câu hỏi">
-            <div
-              *ngIf="questionForm.get('questionName')?.invalid && questionForm.get('questionName')?.touched"
-              class="text-danger">
-              Tên câu hỏi là bắt buộc.
+              <div class="mb-3">
+                <label for="questionNameInput" class="form-label">Tên câu
+                  hỏi</label>
+                <input type="text" class="form-control" id="questionNameInput"
+                  formControlName="questionName" placeholder="Nhập tên câu hỏi">
+                <div
+                  *ngIf="questionForm.get('questionName')?.invalid && questionForm.get('questionName')?.touched"
+                  class="text-danger">
+                  Tên câu hỏi là bắt buộc.
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="questionTextContentInput" class="form-label">Nội
+                  dung câu hỏi</label>
+                <textarea class="form-control" id="questionTextContentInput"
+                  formControlName="questionTextContent" rows="3"
+                  placeholder="Nhập nội dung câu hỏi"></textarea>
+                <div
+                  *ngIf="questionForm.get('questionTextContent')?.invalid && questionForm.get('questionTextContent')?.touched"
+                  class="text-danger">
+                  Nội dung câu hỏi là bắt buộc.
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="mb-3">
-            <label for="questionTextContentInput" class="form-label">Nội dung
-              câu hỏi</label>
-            <textarea class="form-control" id="questionTextContentInput"
-              formControlName="questionTextContent" rows="3"
-              placeholder="Nhập nội dung câu hỏi"></textarea>
-            <div
-              *ngIf="questionForm.get('questionTextContent')?.invalid && questionForm.get('questionTextContent')?.touched"
-              class="text-danger">
-              Nội dung câu hỏi là bắt buộc.
-            </div>
-          </div>
+            <!-- Right Column -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="questionImgContentInput" class="form-label">Nội dung
+                  hình ảnh</label>
+                <input type="file" class="form-control"
+                  id="questionImgContentInput"
+                  formControlName="questionImgContent"
+                  placeholder="Nhập nội dung hình ảnh">
 
-          <div class="mb-3">
-            <label for="questionImgContentInput" class="form-label">Nội dung
-              hình ảnh</label>
-            <input type="text" class="form-control" id="questionImgContentInput"
-              formControlName="questionImgContent"
-              placeholder="Nhập nội dung hình ảnh">
-          </div>
+              </div>
 
-          <div class="mb-3">
-            <label for="questionTypeSelect" class="form-label">Loại câu
-              hỏi</label>
-            <select class="form-select" id="questionTypeSelect"
-              formControlName="questionTypeID">
-              <option value>Chọn loại câu hỏi</option>
-              <!-- Đảm bảo bạn có danh sách các loại câu hỏi để hiển thị ở đây -->
-              <!-- <option *ngFor="let type of questionTypes" [value]="type.id">{{ type.name }}</option> -->
-            </select>
-            <div
-              *ngIf="questionForm.get('questionTypeID')?.invalid && questionForm.get('questionTypeID')?.touched"
-              class="text-danger">
-              Loại câu hỏi là bắt buộc.
-            </div>
-          </div>
+              <div class="mb-3">
+                <label for="questionTypeSelect" class="form-label">Loại câu
+                  hỏi</label>
+                <select class="form-select" id="questionTypeSelect"
+                  formControlName="questionTypeID">
+                  <option value>Chọn loại câu hỏi</option>
+                  <option *ngFor="let questionType of questionTypes"
+                    [value]="questionType.questionTypeID">
+                    {{ questionType.questionTypeName }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="questionForm.get('questionTypeID')?.invalid && questionForm.get('questionTypeID')?.touched"
+                  class="text-danger">
+                  Loại câu hỏi là bắt buộc.
+                </div>
+              </div>
 
-          <div class="mb-3">
-            <label for="subjectSelect" class="form-label">Môn học</label>
-            <select class="form-select" id="subjectSelect"
-              formControlName="subjectsID">
-              <option value>Chọn môn học</option>
-              <!-- Đảm bảo bạn có danh sách các môn học để hiển thị ở đây -->
-              <!-- <option *ngFor="let subject of subjects" [value]="subject.id">{{ subject.name }}</option> -->
-            </select>
-            <div
-              *ngIf="questionForm.get('subjectsID')?.invalid && questionForm.get('subjectsID')?.touched"
-              class="text-danger">
-              Môn học là bắt buộc.
+              <div class="mb-3">
+                <label for="subjectSelect" class="form-label">Môn học</label>
+                <select class="form-select" id="subjectSelect"
+                  formControlName="subjectsID">
+                  <option value>Chọn môn học</option>
+                  <option *ngFor="let subject of subjects"
+                    [value]="subject.subjectsID">
+                    {{ subject.subjectsName }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="questionForm.get('subjectsID')?.invalid && questionForm.get('subjectsID')?.touched"
+                  class="text-danger">
+                  Môn học là bắt buộc.
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary"
-              data-bs-dismiss="modal">Đóng</button>
+              (click)="resetForm()">Làm mới</button>
             <button type="submit" class="btn btn-dark"
               [disabled]="questionForm.invalid">Lưu thay đổi</button>
           </div>

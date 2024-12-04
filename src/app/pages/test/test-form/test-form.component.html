@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="testModalLabel">
+    {{ currentTest ? 'Cập nhật' : 'Thêm mới' }}
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="mb-3 col-6">
+          <label for="testCode" class="form-label">Mã bài kiểm tra</label>
+          <input type="text" class="form-control" id="testCode" [(ngModel)]="formData.testCode" name="testCode" placeholder="Nhập mã bài kiểm tra" required>
+          <small *ngIf="!formData.testCode && submitted" class="text-danger">Không được để trống</small>
+        </div>
+        <div class="mb-3 col-6">
+          <label for="testName" class="form-label">Tên bài kiểm tra</label>
+          <input type="text" class="form-control" id="testName" [(ngModel)]="formData.testName" name="testName" placeholder="Nhập tên bài kiểm tra" required>
+          <small *ngIf="!formData.testName && submitted" class="text-danger">Không được để trống</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-3 col-6">
+          <label for="numberOfQuestions" class="form-label">Số lượng câu hỏi</label>
+          <input type="text" class="form-control" id="numberOfQuestions" [(ngModel)]="formData.numberOfQuestions" name="numberOfQuestions" placeholder="Nhập buổi học" required>
+          <small *ngIf="!formData.numberOfQuestions && submitted" class="text-danger">Không được để trống</small>
+        </div>
+        <div class="mb-3 col-6">
+          <label for="subjectsID" class="form-label">Chủ đề</label>
+          <select class="form-control" id="subjectsID" [(ngModel)]="formData.subjectsID" name="subjectsID" required>
+            <option *ngFor="let subject of subjectsList" [value]="subject.subjectsID">
+              {{ subject.subjectsName }}
+            </option>
+          </select>
+          <small *ngIf="!formData.subjectsID && submitted" class="text-danger">Không được để trống</small>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: end">
+        <!-- Nút hủy để đóng modal -->
+        <button type="button" class="btn btn-outline-dark me-2" (click)="cancelEdit()">Làm mới</button>
+        <!-- Nút submit cho form -->
+        <button type="submit" class="btn btn-dark">
+          {{ currentTest ? 'Cập nhật' : 'Thêm' }}
+        </button>
+      </div>
+    </form>
+</div>

@@ -67,3 +67,7 @@ input.nav-search-input{
 .child {
   text-align: center; /* Căn giữa nội dung bên trong */
 }
+.icon {
+  cursor: pointer;
+  margin-right: 8px; /* Adds spacing between icons */
+}

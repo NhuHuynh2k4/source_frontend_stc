@@ -44,4 +44,10 @@ export class StudentService {
     const url = `${this.baseUrl}/delete/${StudentID}`;  // Tạo URL với ID lớp học
     return this.http.delete<any>(url);  // Gửi request DELETE
   }
+  exportToExcel(): Observable<Blob> {
+    const url = `${this.baseUrl}/export`; // Địa chỉ API xuất Excel
+    return this.http.get(url, {
+      responseType: 'blob' // API trả về kiểu file nhị phân
+    });
+  }
 }

@@ -43,4 +43,8 @@ export class SubjectService {
   deleteSubject(subjectId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/delete/${subjectId}`);
   }
+
+  exportToExcel(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/export`, { responseType: 'blob' });
+}
 }

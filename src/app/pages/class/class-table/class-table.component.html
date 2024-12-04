@@ -1,31 +1,36 @@
 <div class="container mt-4 mb-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/"><i
-            class="fas fa-house"></i><span>Trang chủ</span></a></li>
+      <li class="breadcrumb-item"><a href="/"><i class="fas fa-house"></i><span>Trang chủ</span></a></li>
       <li class="breadcrumb-item"><a href="/class">Lớp học</a></li>
       <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
     </ol>
   </nav>
 
-  <div class="d-flex justify-content-between mt-50 mb-30">
+  <div class="d-flex justify-content-between">
     <div class="w-50">
+      <!-- Thanh tìm kiếm -->
       <form class="d-flex nav-search-form me-3">
         <i class="fa fa-search nav-fa-search"></i>
-        <input class="form-control me-2 nav-search-input" type="search"
-          placeholder="Tìm kiếm" aria-label="Search">
+        <input class="form-control me-2 nav-search-input"
+               [(ngModel)]="searchQuery"
+               name="search"
+               type="search"
+               placeholder="Tìm kiếm"
+               aria-label="Search"
+               (input)="onSearch()">
       </form>
     </div>
     <div class="button-container">
-      <button class="btn btn-outline-dark"><i class="fas fa-download"></i><span
-          class="ps-2">Xuất excel</span></button>
+      <button class="btn btn-outline-dark" (click)="exportToExcel()"><i class="fas fa-download" ></i><span class="ps-2">Xuất excel</span></button>
       <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-        data-bs-target="#questionModal">
+              data-bs-target="#examlpeModal" (click)="editClass(null)">
         <i class="fas fa-plus"></i><span class="ps-2">Thêm mới</span>
       </button>
     </div>
   </div>
 
+  <!-- Phần danh sách lớp học -->
   <div class="container mt-4 p-0">
     <div class="card">
       <div class="card-header" style="background-color: #fff;">
@@ -34,52 +39,46 @@
       <div class="card-body p-0">
         <table class="table table-bordered mb-0">
           <thead class="table-secondary table-borderless">
-            <tr>
-              <th>STT</th>
-              <th>Mã lớp</th> <!-- ClassCode -->
-              <th>Tên lớp</th> <!-- ClassName -->
-              <th>Buổi học</th> <!-- Session -->
-              <th>Chủ đề</th>
-              <th>Ngày cập nhật</th> <!-- UpdateDate -->
-              <th>Ngày tạo</th> <!-- CreateDate -->
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
-            </tr>
+          <tr>
+            <th>STT</th>
+            <th>Mã lớp</th>
+            <th>Tên lớp</th>
+            <th>Buổi học</th>
+            <th>Chủ đề</th>
+            <th>Thao tác</th>
+          </tr>
           </thead>
           <tbody>
-            <!-- Lặp qua danh sách lớp học -->
-            <tr *ngFor="let class of classes; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ class.classCode }}</td>
-              <td>{{ class.className }}</td>
-              <td>{{ class.session }}</td>
-              <td>{{class.subjectsName}}</td>
-              <td>{{ class.updateDate | date: 'dd/MM/yyyy' }}</td>
-              <td>{{ class.createDate | date: 'dd/MM/yyyy' }}</td>
-              <td>{{class.isDelete == true ? "Không sử dụng" :
-                "Đã sử dụng"}}</td>
-              <td>
-                <i class="fas fa-eye icon"></i>
-                <i class="fas fa-pencil icon"></i>
-                <i class="fas fa-trash icon"></i>
-              </td>
-            </tr>
+          <tr *ngFor="let class of pagedClasses; let i = index">
+            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td>{{ class.classCode }}</td>
+            <td>{{ class.className }}</td>
+            <td>{{ class.session }}</td>
+            <td>{{ class.subjectsName }}</td>
+            <td style="display: flex; justify-content: space-around; cursor: pointer">
+              <a data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="editClass(class)"><i class="fas fa-pencil icon"></i></a>
+              <i class="fas fa-trash icon" (click)="deleteClass(class.classID)"></i>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
-      <div class="card-footer"
-        style="display: flex;justify-content: space-between;align-items: center; background-color: white; border-top:0px; ">
-        <div>
-          Trang 1 của 10
-        </div>
-        <div>
+      <div class="card-footer">
+        <div style="display: flex; justify-content: space-between; width: 100%">
+        <span>
+          Trang {{ currentPage }} trong {{ totalPages }}
+        </span>
           <nav aria-label="...">
             <ul class="pagination pagination-sm mb-0">
-              <li class="page-item active" aria-current="page">
-                <span class="page-link">1</span>
+              <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+                <a class="page-link" (click)="setPage(currentPage - 1)">«</a>
               </li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [ngClass]="{'active': currentPage === i + 1}">
+                <a class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+                <a class="page-link" (click)="setPage(currentPage + 1)">»</a>
+              </li>
             </ul>
           </nav>
         </div>
@@ -87,3 +86,19 @@
     </div>
   </div>
 </div>
+
+<!-- Form thêm mới hoặc cập nhật lớp học -->
+<div class="modal fade" id="classModal" tabindex="-1" aria-labelledby="classModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div *ngIf="!currentClass">
+          <app-class-form [currentClass]="null" (formSubmit)="reloadClasses()"></app-class-form>
+        </div>
+        <div *ngIf="currentClass" >
+          <app-class-form [currentClass]="currentClass" (formSubmit)="reloadClasses()"></app-class-form>
+        </div>
+    </div>
+  </div>
+</div>
+
+

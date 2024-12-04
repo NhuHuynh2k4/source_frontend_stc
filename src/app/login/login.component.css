@@ -1,0 +1,14 @@
+/* src/app/login/login.component.css */
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+}

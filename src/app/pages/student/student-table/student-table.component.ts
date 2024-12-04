@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StudentService } from 'src/app/services/student.service';
-import { AlertService } from "../../../services/alert.service";
+import { AlertStudentService } from "../../../services/alertStudent.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-student-table',
@@ -12,10 +13,14 @@ export class StudentTableComponent implements OnInit {
   studentForm!: FormGroup;
   isUpdate: boolean = false;
   students: any[] = [];
-  selectedStudent: any;
+  filteredStudents: any[] = []; // Danh sách sinh viên đã lọc
+  searchKeyword: string = ''; // Biến từ khóa tìm kiếm
 
-  constructor(private studentService: StudentService ,private fb: FormBuilder,public alertService: AlertService) 
-  {
+  constructor(
+    private studentService: StudentService,
+    private fb: FormBuilder,
+    public alertService: AlertStudentService
+  ) {
     this.studentForm = this.fb.group({
       StudentID: [''],
       StudentCode: [''],
@@ -28,84 +33,122 @@ export class StudentTableComponent implements OnInit {
     });
   }
 
-  onEdit(studentId: number) {
-     
-    this.studentService.getStudentById(studentId).subscribe({
-      next: (studentData) => {
-        this.studentService.setSelectedStudent(studentData); // Sử dụng service để đặt dữ liệu
-        const modalElement = document.getElementById('exampleModal1');
-        if (modalElement) {
-          const modal = new (window as any).bootstrap.Modal(modalElement);
-          modal.show();
+  showSuccess(message: string, title: string): void {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: 'success',
+      confirmButtonText: 'OK',
+      didOpen: () => {
+        const swalPopup = document.querySelector('.swal2-container') as HTMLElement;
+        if (swalPopup) {
+          swalPopup.style.zIndex = '9999';
         }
-        // if (studentData) {
-        //   console.log('Dữ liệu sinh viên nhận được:', studentData);
-        //   this.loadStudentData(studentData);
-        // } else {
-        //   console.error('Không tìm thấy sinh viên với ID:', studentId);
-        //   this.alertService.displayAlert('Không tìm thấy sinh viên.', 'danger');
-        // }
-      },
-      error: (error) => {
-        console.error('Lỗi khi lấy thông tin sinh viên:', error);
-        this.alertService.displayAlert('Lỗi khi lấy thông tin sinh viên.', 'danger');
       }
     });
   }
-  
-  
+
+  showError(message: string, title: string): void {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+      didOpen: () => {
+        const swalPopup = document.querySelector('.swal2-container') as HTMLElement;
+        if (swalPopup) {
+          swalPopup.style.zIndex = '9999';
+        }
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.fetchStudents();
-    console.log(this.students); // Kiểm tra mảng sinh viên
   }
 
   fetchStudents(): void {
     this.studentService.getStudents().subscribe(
       (data) => {
         this.students = data;
-        console.log('Students data:', data);
-
+        this.filteredStudents = data; // Gán danh sách lọc ban đầu
       },
       (error) => {
         console.error('Error fetching students:', error);
-        this.alertService.displayAlert('Lỗi khi lấy danh sách sinh viên.', 'danger');
+        this.alertService.displayStudentAlert('Lỗi khi lấy danh sách sinh viên.', 'error');
       }
     );
   }
-  
-  // loadStudentData(studentData: any): void {
-  //   console.log('Dữ liệu nạp vào form:', studentData);
-  //   this.isUpdate = true; // Chuyển sang chế độ cập nhật
-  
-  //   // Kiểm tra xem dữ liệu có đầy đủ không và gọi patchValue
-  //   if (this.studentForm) {
-  //     this.studentForm.patchValue({
-  //       studentCode: studentData.studentCode,
-  //       studentName: studentData.studentName,
-  //       gender: studentData.gender,
-  //       numberPhone: studentData.numberPhone,
-  //       address: studentData.address,
-  //       birthdayDate: studentData.birthdayDate,
-  //       email: studentData.email
-  //     });
-  //   } else {
-  //     console.error('Form chưa được khởi tạo!');
-  //     this.alertService.displayAlert('Form chưa được khởi tạo.', 'danger');
-  //   }
-  // }
-  
-  deleteStudent(StudentID: number): void {
-    if (confirm('Bạn có chắc chắn muốn xóa sinh viên này không?')) {
-      this.studentService.deleteStudent(StudentID).subscribe(
-        (response) => {
-          this.alertService.displayAlert('Xóa sinh viên thành công!', 'success');
-          this.fetchStudents();
-        },
-        (error) => {
-          this.alertService.displayAlert('Lỗi khi xóa sinh viên.', 'danger');
-          console.error('Lỗi khi xóa sinh viên:', error);
-        }
+
+  filterStudents(): void {
+    if (!this.searchKeyword) {
+      this.filteredStudents = this.students; // Nếu không có từ khóa tìm kiếm, hiển thị tất cả sinh viên
+    } else {
+      this.filteredStudents = this.students.filter(student =>
+        student.studentName.toLowerCase().includes(this.searchKeyword.toLowerCase()) ||
+        student.studentCode.toLowerCase().includes(this.searchKeyword.toLowerCase()) ||
+        student.email.toLowerCase().includes(this.searchKeyword.toLowerCase()) // Có thể thêm các trường khác
       );
     }
+  }
+
+  onEdit(studentId: number) {
+    this.studentService.getStudentById(studentId).subscribe({
+      next: (studentData) => {
+        this.studentService.setSelectedStudent(studentData);
+        const modalElement = document.getElementById('exampleModal1');
+        if (modalElement) {
+          const modal = new (window as any).bootstrap.Modal(modalElement);
+          modal.show();
+        }
+      },
+      error: (error) => {
+        console.error('Lỗi khi lấy thông tin sinh viên:', error);
+        this.alertService.displayStudentAlert('Lỗi khi lấy thông tin sinh viên.', 'error');
+      }
+    });
+  }
+
+  deleteStudent(StudentID: number): void {
+    Swal.fire({
+      title: 'Xác nhận xóa',
+      text: 'Bạn có chắc chắn muốn xóa sinh viên này không?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Thực hiện xóa sinh viên
+        this.studentService.deleteStudent(StudentID).subscribe(
+          (response) => {
+            this.showSuccess('Xóa sinh viên thành công!', 'Thành công');
+            this.fetchStudents(); // Cập nhật lại danh sách sau khi xóa
+          },
+          (error) => {
+            this.showError('Lỗi khi xóa sinh viên.', 'Thất bại');
+            console.error('Lỗi khi xóa sinh viên:', error);
+          }
+        );
+      }
+    });
+  }
+  
+
+  exportToExcel(): void {
+    this.studentService.exportToExcel().subscribe((blob: Blob) => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(blob); // Tạo URL cho file
+
+      a.href = objectUrl;
+      a.download = 'Student.xlsx'; // Tên file tải xuống
+      a.click(); // Kích hoạt tải file
+
+      URL.revokeObjectURL(objectUrl); // Giải phóng URL sau khi tải
+    }, error => {
+      console.error('Xuất Excel thất bại', error);
+    });
   }
 }

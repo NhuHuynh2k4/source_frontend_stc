@@ -1,0 +1,64 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="formSubmitLabel">
+    {{ currentExam ? 'Cập nhật' : 'Thêm mới' }}
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <!-- Thêm (ngSubmit) cho form -->
+    <form (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="mb-3 col-6">
+          <label for="examCode" class="form-label">Mã kì thi</label>
+          <input type="text" class="form-control" id="examCode" [(ngModel)]="formData.examCode" name="examCode" placeholder="Nhập mã kì thi" required>
+          <small *ngIf="!formData.examCode && submitted" class="text-danger">Không được để trống</small>
+        </div>
+        <div class="mb-3 col-6">
+          <label for="examName" class="form-label">Tên kì thi</label>
+          <input type="text" class="form-control" id="examName" [(ngModel)]="formData.examName" name="examName" placeholder="Nhập tên kì thi" required>
+          <small *ngIf="!formData.examName && submitted" class="text-danger">Không được để trống</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-3 col-6">
+          <label for="examDate" class="form-label">Ngày thi</label>
+          <input type="datetime-local" class="form-control" id="examDate" [(ngModel)]="formData.examDate" name="examDate" placeholder="Nhập ngày thi" required>
+          <small *ngIf="!formData.examDate && submitted" class="text-danger">Không được để trống</small>
+        </div>
+        <div class="mb-3 col-6">
+          <label for="duration" class="form-label">Thời gian thi</label>
+          <input type="text" class="form-control" id="duration" [(ngModel)]="formData.duration" name="duration" placeholder="Nhập thời gian thi" required>
+          <small *ngIf="!formData.duration && submitted" class="text-danger">Không được để trống</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-3 col-6">
+          <label for="numberOfQuestions" class="form-label">Số câu hỏi</label>
+          <input type="text" class="form-control" id="numberOfQuestions" [(ngModel)]="formData.numberOfQuestions" name="numberOfQuestions" placeholder="Nhập số lượng câu hỏi" required>
+          <small *ngIf="!formData.numberOfQuestions && submitted" class="text-danger">Không được để trống</small>
+        </div>
+        <div class="mb-3 col-6">
+          <label for="totalMarks" class="form-label">Tổng điểm</label>
+          <input type="text" class="form-control" id="totalMarks" [(ngModel)]="formData.totalMarks" name="totalMarks" placeholder="Nhập tổng điểm" required>
+          <small *ngIf="!formData.totalMarks && submitted" class="text-danger">Không được để trống</small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="testID" class="form-label">Bài thi</label>
+        <select class="form-control" id="testID" [(ngModel)]="formData.testID" name="testID" required>
+          <option *ngFor="let test of testsList" [value]="test.testID">
+            {{ test.testName }}
+          </option>
+        </select>
+        <small *ngIf="!formData.testID && submitted" class="text-danger">Không được để trống</small>
+      </div>
+      <div style="display: flex; justify-content: end">
+        <!-- Nút hủy để đóng modal -->
+        <button type="button" class="btn btn-outline-dark me-2" (click)="cancelEdit()">Làm mới</button>
+        <!-- Nút submit cho form -->
+        <button type="submit" class="btn btn-dark">
+          {{ currentExam ? 'Cập nhật' : 'Thêm' }}
+        </button>
+      </div>
+    </form>
+</div>

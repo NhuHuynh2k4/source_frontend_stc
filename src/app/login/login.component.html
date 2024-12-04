@@ -1,0 +1,15 @@
+<div class="login-container">
+  <h2 class="mb-3">Đăng Nhập</h2>
+  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" id="floatingInput" formControlName="email" placeholder="name@example.com" required>
+      <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control" id="floatingPassword" formControlName="password" placeholder="Password" required>
+      <label for="floatingPassword">Password</label>
+    </div>
+    <button type="submit" class="btn btn-dark" style="width: 100%">Đăng nhập</button>
+  </form>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</div>

@@ -13,19 +13,19 @@
   </nav>
 
   <!-- Tìm kiếm và các nút chức năng -->
-  <div class="d-flex justify-content-between mt-50 mb-30">
+  <div class="d-flex justify-content-between mt-3 mb-3">
     <div class="w-50">
       <form class="d-flex nav-search-form me-3">
         <i class="fa fa-search nav-fa-search"></i>
         <input
           class="form-control me-2 nav-search-input"
           type="search"
-          placeholder="Tìm kiếm chủ đề"
-          aria-label="Search" />
+          placeholder="Tìm kiếm Mã môn và tên môn học"
+          [formControl]="searchControl" />
       </form>
     </div>
     <div class="button-container">
-      <button class="btn btn-outline-dark">
+      <button class="btn btn-outline-dark" (click)="exportExcel()">
         <i class="fas fa-download"></i><span class="ps-2">Xuất excel</span>
       </button>
       <button
@@ -51,41 +51,46 @@
               <th>STT</th>
               <th>Mã Môn Học</th> <!-- subjectsCode -->
               <th>Tên Môn Học</th> <!-- subjectsName -->
-
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let subject of subjects; let i = index">
-              <td>{{ i + 1 }}</td>
+            <tr *ngFor="let subject of pagedSubjects; let i = index">
+              <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td>{{ subject.subjectsCode }}</td>
               <td>{{ subject.subjectsName }}</td>
-
               <td>
                 <i class="fas fa-pencil icon"
                   (click)="onEdit(subject.subjectsID)"></i>
                 <i class="fas fa-trash icon"
                   (click)="deleteSubject(subject.subjectsID)"></i>
               </td>
-
             </tr>
           </tbody>
         </table>
-
       </div>
-      <div class="card-footer"
-        style="display: flex;justify-content: space-between;align-items: center; background-color: white; border-top:0px; ">
-        <div>
-          Trang 1 của 10
-        </div>
-        <div>
+
+      <!-- Phân trang -->
+      <div class="card-footer">
+        <div style="display: flex; justify-content: space-between; width: 100%">
+          <span>
+            Trang {{ currentPage }} trong {{ totalPages }}
+          </span>
           <nav aria-label="...">
             <ul class="pagination pagination-sm mb-0">
-              <li class="page-item active" aria-current="page">
-                <span class="page-link">1</span>
+              <li class="page-item" [ngClass]="{ disabled: currentPage === 1 }">
+                <a class="page-link" (click)="setPage(currentPage - 1)">«</a>
               </li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li
+                class="page-item"
+                *ngFor="let page of [].constructor(totalPages); let i = index"
+                [ngClass]="{ active: currentPage === i + 1 }">
+                <a class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li class="page-item"
+                [ngClass]="{ disabled: currentPage === totalPages }">
+                <a class="page-link" (click)="setPage(currentPage + 1)">»</a>
+              </li>
             </ul>
           </nav>
         </div>

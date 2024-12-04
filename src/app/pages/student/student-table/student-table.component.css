@@ -1,70 +1,69 @@
 .breadcrumb-item a{
-    list-style: none;
-    text-decoration: none;
-    color: #000;
-  }
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
+
+.breadcrumb-item{
+  color:#000;
+}
+
+.active{
+  font-weight:bold;
+}
+
+.breadcrumb-item fa-house{
+  color: gray;
+}
+
+.breadcrumb-item span{
+  margin-left: 5px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  margin: 0 10px;
+}
+
+.nav-search-form{
+  position: relative;
+  width: 300px;
+  display: flex;
+  align-items: center;
+}
+
+i.nav-fa-search{
+  position:absolute;
+  top:10px;
+  left:10px;
+  color:gray;
+}
+
+input.nav-search-input{
+  text-indent: 20px;
+}
+
+/*margin*/
+.mt-50{
+  margin-top: 50px;
+}
+
+.mb-30{
+  margin-bottom: 30px;
+} 
+.parent {
   
-  .breadcrumb-item{
-    color:#000;
-  }
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: center; /* Căn giữa theo chiều ngang */
   
-  .active{
-    font-weight:bold;
-  }
   
-  .breadcrumb-item fa-house{
-    color: gray;
-  }
-  
-  .breadcrumb-item span{
-    margin-left: 5px;
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .btn {
-    margin: 0 10px;
-  }
-  
-  .nav-search-form{
-    position: relative;
-    width: 300px;
-    display: flex;
-    align-items: center;
-  }
-  
-  i.nav-fa-search{
-    position:absolute;
-    top:10px;
-    left:10px;
-    color:gray;
-  }
-  
-  input.nav-search-input{
-    text-indent: 20px;
-  }
-  
-  /*margin*/
-  .mt-50{
-    margin-top: 50px;
-  }
-  
-  .mb-30{
-    margin-bottom: 30px;
-  } 
-  .parent {
-    
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    
-    
-  }
-  
-  .child {
-    text-align: center; /* Căn giữa nội dung bên trong */
-  }
-  
+}
+
+.child {
+  text-align: center; /* Căn giữa nội dung bên trong */
+}

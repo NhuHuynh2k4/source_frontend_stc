@@ -1,0 +1,106 @@
+<div class="container mt-4 mb-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/"><i class="fas fa-house"></i><span>Trang chủ</span></a></li>
+      <li class="breadcrumb-item"><a href="/class">Lớp học</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex justify-content-between">
+    <div class="w-50">
+      <form class="d-flex nav-search-form me-3">
+        <i class="fa fa-search nav-fa-search"></i>
+        <input class="form-control me-2 nav-search-input"
+               [(ngModel)]="searchQuery"
+               name="search"
+               type="search"
+               placeholder="Tìm kiếm"
+               aria-label="Search"
+               (input)="onSearch()">
+      </form>
+    </div>
+    <div class="button-container">
+      <button class="btn btn-outline-dark" (click)="exportToExcel()"><i class="fas fa-download"></i><span class="ps-2">Xuất excel</span></button>
+      <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="editExam(null)">
+        <i class="fas fa-plus"></i><span class="ps-2">Thêm mới</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container mt-4 p-0">
+    <div class="card">
+      <div class="card-header" style="background-color: #fff;">
+        <h5 class="m-2">Danh sách kì thi học</h5>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-bordered mb-0">
+          <thead class="table-secondary table-borderless">
+          <tr>
+            <th>STT</th>
+            <th>Mã kì thi</th>
+            <th>Tên kì thi</th>
+            <th>Ngày thi</th>
+            <th>Thời gian thi</th>
+            <th>Số lượng</th>
+            <th>Tổng điểm</th>
+            <th>Bài kiểm tra</th>
+            <th>Thao tác</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let exam of pagedExams; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ exam.examCode }}</td>
+            <td>{{ exam.examName }}</td>
+            <td>{{ exam.examDate }}</td>
+            <td>{{ exam.duration }}</td>
+            <td>{{ exam.numberOfQuestions }}</td>
+            <td>{{ exam.totalMarks }}</td>
+            <td>{{ getTestName(exam.testID) }}</td>
+            <td style="display: flex; justify-content: space-around;cursor: pointer">
+              <a data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="editExam(exam)"><i class="fas fa-pencil icon"></i></a> <!-- Khi nhấn vào pencil, gọi editExam để chỉnh sửa -->
+              <i class="fas fa-trash icon" (click)="deleteExam(exam.examID)"></i> <!-- Xóa kì thi học -->
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+        <div style="display: flex; justify-content: space-between; width: 100%">
+        <span>
+          Trang {{ currentPage }} trong {{ totalPages }}
+        </span>
+          <nav aria-label="...">
+            <ul class="pagination pagination-sm mb-0">
+              <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+                <a class="page-link" (click)="setPage(currentPage - 1)">«</a>
+              </li>
+              <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [ngClass]="{'active': currentPage === i + 1}">
+                <a class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+                <a class="page-link" (click)="setPage(currentPage + 1)">»</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Form thêm mới hoặc cập nhật kì thi học -->
+<div class="modal fade" id="examModal" tabindex="-1" aria-labelledby="examModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-wrapper">
+    <div class="modal-content">
+      <div *ngIf="!currentExam">
+        <app-exam-form [currentExam]="null" (formSubmit)="reloadExams()"></app-exam-form>
+      </div>
+      <div *ngIf="currentExam" >
+        <app-exam-form [currentExam]="currentExam" (formSubmit)="reloadExams()"></app-exam-form>
+      </div>
+    </div>
+  </div>
+</div>
+
+

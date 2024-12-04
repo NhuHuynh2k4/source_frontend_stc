@@ -20,7 +20,7 @@ export class QuestionTypeTableComponent implements OnInit {
   rowsPerPage: number = 5;
   currentPage: number = 1;
   totalPages: number = 0;
-  pages: number[] = [];
+  pages: number[] = []; 
 
   searchText: string = '';
 

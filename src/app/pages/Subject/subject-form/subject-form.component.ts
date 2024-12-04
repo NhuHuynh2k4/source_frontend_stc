@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SubjectService } from 'src/app/services/subject.service';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 declare var bootstrap: any;
-
 @Component({
   selector: 'app-subject-form',
   templateUrl: './subject-form.component.html'
@@ -79,46 +79,65 @@ export class SubjectFormComponent implements OnInit {
     this.cdr.detectChanges(); // Trigger change detection
   }
   onSubmit() {
-    this.backendErrors = {};
-    this.successMessage = '';
+  this.backendErrors = {};
+  this.successMessage = '';
 
-    if (this.subjectForm.invalid) {
-      this.subjectForm.markAllAsTouched();
-      return;
-    }
-
-    const subjectData = this.subjectForm.getRawValue();
-    console.log('Subject Data being sent:', subjectData); // Log dữ liệu gửi đi
-
-    const apiCall = this.isUpdate
-      ? this.subjectService.updateSubject(subjectData)
-      : this.subjectService.createSubject(subjectData);
-
-    apiCall.subscribe({
-      next: (response) => {
-        if (response && response.message) {
-          this.successMessage = response.message;
-          console.log(this.successMessage);
-
-          // Gọi hàm để tự động đóng modal
-          this.closeModal();
-
-          // Phát sự kiện để cập nhật danh sách môn học ở `SubjectComponent`
-          this.subjectUpdated.emit();
-
-          // Reset form sau khi thêm/cập nhật thành công
-          this.resetForm();
-
-          // Trigger change detection manually
-          this.cdr.detectChanges();
-        }
-      },
-      error: (error) => {
-        console.error('Lỗi:', error);
-        this.handleBackendErrors(error);
-      }
-    });
+  if (this.subjectForm.invalid) {
+    this.subjectForm.markAllAsTouched();
+    return;
   }
+
+  const subjectData = this.subjectForm.getRawValue();
+  console.log('Subject Data being sent:', subjectData); // Log dữ liệu gửi đi
+
+  const apiCall = this.isUpdate
+    ? this.subjectService.updateSubject(subjectData)
+    : this.subjectService.createSubject(subjectData);
+
+  apiCall.subscribe({
+    next: (response) => {
+      if (response && response.message) {
+        this.successMessage = response.message;
+        console.log(this.successMessage);
+
+        // Dynamically set the success message based on the response
+        const successTitle = this.isUpdate ? 'Cập nhật thành công!' : 'Thêm môn học thành công!';
+        const successText = response.message; // Use the response message dynamically
+
+        // SweetAlert2 thông báo thành công
+        Swal.fire({
+          title: successTitle,
+          text: successText,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+
+            // Gọi hàm để tự động đóng modal
+            this.closeModal();
+
+            // Phát sự kiện để cập nhật danh sách môn học ở `SubjectComponent`
+            this.subjectUpdated.emit();
+
+            // Reset form sau khi thêm/cập nhật thành công
+            this.resetForm();
+
+            // Trigger change detection manually (if required)
+            this.cdr.detectChanges();
+          }
+        });
+      }
+    },
+    error: (error) => {
+      console.error('Lỗi:', error);
+      this.handleBackendErrors(error);
+    }
+  });
+}
+
+
+
 
 
   closeModal() {

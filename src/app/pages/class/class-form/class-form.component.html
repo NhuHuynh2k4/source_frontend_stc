@@ -1,36 +1,46 @@
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Thêm mới thông tin</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Form bên trong Modal -->
-        <form>
-          <div class="mb-3">
-            <label for="nameInput" class="form-label">Tên</label>
-            <input type="text" class="form-control" id="nameInput" placeholder="Nhập tên">
-          </div>
-          <div class="mb-3">
-            <label for="emailInput" class="form-label">Email</label>
-            <input type="email" class="form-control" id="emailInput" placeholder="Nhập email">
-          </div>
-          <div class="mb-3">
-            <label for="phoneInput" class="form-label">Số điện thoại</label>
-            <input type="tel" class="form-control" id="phoneInput" placeholder="Nhập số điện thoại">
-          </div>
-          <div class="mb-3">
-            <label for="addressInput" class="form-label">Địa chỉ</label>
-            <input type="text" class="form-control" id="addressInput" placeholder="Nhập địa chỉ">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-        <button type="button" class="btn btn-dark">Lưu thay đổi</button>
-      </div>
+<div class="modal-header">
+  <h5 class="modal-title" id="classModalLabel">
+    {{ currentClass ? 'Cập nhật' : 'Thêm mới' }}
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+<form (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="mb-3 col-6">
+      <label for="classCode" class="form-label">Mã lớp</label>
+      <input type="text" class="form-control" id="classCode" [(ngModel)]="formData.classCode" name="classCode" placeholder="Nhập mã lớp" required>
+      <small *ngIf="!formData.classCode && submitted" class="text-danger">Mã lớp học không được để trống</small>
+    </div>
+    <div class="mb-3 col-6">
+      <label for="className" class="form-label">Tên lớp</label>
+      <input type="text" class="form-control" id="className" [(ngModel)]="formData.className" name="className" placeholder="Nhập tên lớp" required>
+      <small *ngIf="!formData.className && submitted" class="text-danger">Tên lớp học không được để trống</small>
     </div>
   </div>
+  <div class="row">
+    <div class="mb-3 col-6">
+      <label for="session" class="form-label">Buổi học</label>
+      <input type="text" class="form-control" id="session" [(ngModel)]="formData.session" name="session" placeholder="Nhập buổi học" required>
+      <small *ngIf="!formData.session && submitted" class="text-danger">Số buổi học lớp học không được để trống</small>
+    </div>
+    <div class="mb-3 col-6">
+      <label for="subjectsID" class="form-label">Chủ đề</label>
+      <select class="form-control" id="subjectsID" [(ngModel)]="formData.subjectsID" name="subjectsID" required>
+        <option *ngFor="let subject of subjectsList" [value]="subject.subjectsID">
+          {{ subject.subjectsName }}
+        </option>
+      </select>
+      <small *ngIf="!formData.subjectsID && submitted" class="text-danger">Chủ đề lớp học không được để trống</small>
+    </div>
+  </div>
+  <div style="display: flex; justify-content: end">
+    <!-- Nút hủy để đóng modal -->
+    <button type="button" class="btn btn-outline-dark me-2" (click)="cancelEdit()">Làm mới</button>
+    <!-- Nút submit cho form -->
+    <button type="submit" class="btn btn-dark">
+      {{ currentClass ? 'Cập nhật' : 'Thêm' }}
+    </button>
+  </div>
+</form>
 </div>
